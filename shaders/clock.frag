@@ -17,7 +17,7 @@ void main() {
     float diff = max(dot(N, L), 0.0);
     float spec = pow(max(dot(N, H), 0.0), 72.0);
 
-    // Bright colored pieces (VSB teal / second hand red) get a tiny emissive lift.
+    // Bright colored pieces (KI teal / second hand red) get a tiny emissive lift.
     float chroma = max(fragColor.r, max(fragColor.g, fragColor.b)) -
                    min(fragColor.r, min(fragColor.g, fragColor.b));
     float emissive = smoothstep(0.22, 0.65, chroma) * 0.16;

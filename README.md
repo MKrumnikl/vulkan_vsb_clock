@@ -1,7 +1,7 @@
 # VŠB Vulkan Clock
 
 A compact teaching demo: a real 3D analog clock rendered directly with Vulkan on Linux.
-The clock face, raised markings, hands and a stylized VŠB logo are procedural geometry;
+The clock face, raised markings, hands and a stylized KI logo are procedural geometry;
 there are no texture/font assets to load.
 
 ## Features
@@ -11,7 +11,7 @@ there are no texture/font assets to load.
 - real local system time, including smooth seconds
 - physically inspired diffuse/specular lighting
 - raised 3D dial, rim, hour/minute ticks and digits
-- raised turquoise VŠB logo and bars inspired by the supplied reference
+- raised turquoise KI logo and bars inspired by the supplied reference
 - interactive orbit camera and zoom
 - gentle automatic camera motion suitable for a projector/demo
 - swapchain recreation on resize
@@ -87,5 +87,5 @@ behind an engine. Interesting places to discuss in `src/main.cpp`:
 9. frame synchronization with semaphores and fences
 10. conversion of real local time to 3D hand rotations
 
-The VŠB mark here is a lightweight geometric classroom rendition rather than an official
+The KI mark here is a lightweight geometric classroom rendition rather than an official
 branding asset, so it stays dependency-free and remains clearly visible in 3D.

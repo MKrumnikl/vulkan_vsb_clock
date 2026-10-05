@@ -286,44 +286,35 @@ void addBeam2D(Mesh& m, glm::vec2 a, glm::vec2 b, float width, float z, float de
     addBox(m,{c.x,c.y,z},{width,len,depth},color,ang);
 }
 
-void addVsbLogo(Mesh& m) {
+void addKiLogo(Mesh& m) {
     const float z = 0.168f;
     const float d = 0.022f;
-    const float y = 0.105f;
-    const float x0 = -0.25f;
+    const float y = -0.40f;
     const float h = 0.19f;
-    const float w = 0.13f;
     const float stroke = 0.026f;
 
-    // V
-    addBeam2D(m,{x0-w*0.45f,y+h*0.5f},{x0,y-h*0.5f},stroke,z,d,COL_TEAL);
-    addBeam2D(m,{x0+w*0.45f,y+h*0.5f},{x0,y-h*0.5f},stroke,z,d,COL_TEAL);
+    // K
+    const float kLeft = -0.19f;
+    const float kRight = -0.04f;
+    addBox(m,{kLeft,y,z},{stroke,h,d},COL_TEAL);
+    addBeam2D(m,{kLeft,y},{kRight,y+h*0.5f},stroke,z,d,COL_TEAL);
+    addBeam2D(m,{kLeft,y},{kRight,y-h*0.5f},stroke,z,d,COL_TEAL);
 
-    // Š, deliberately geometric/modern.
-    const float sx = 0.0f;
-    addBox(m,{sx,y+h*0.43f,z},{0.12f,stroke,d},COL_TEAL);
-    addBox(m,{sx-0.045f,y+h*0.22f,z},{stroke,0.075f,d},COL_TEAL);
-    addBox(m,{sx,y,z},{0.12f,stroke,d},COL_TEAL);
-    addBox(m,{sx+0.045f,y-h*0.22f,z},{stroke,0.075f,d},COL_TEAL);
-    addBox(m,{sx,y-h*0.43f,z},{0.12f,stroke,d},COL_TEAL);
-    addBeam2D(m,{sx-0.035f,y+h*0.67f},{sx,y+h*0.59f},0.017f,z,d,COL_TEAL);
-    addBeam2D(m,{sx+0.035f,y+h*0.67f},{sx,y+h*0.59f},0.017f,z,d,COL_TEAL);
+    // I with horizontal caps for clear readability.
+    const float ix = 0.13f;
+    addBox(m,{ix,y,z},{stroke,h,d},COL_TEAL);
+    addBox(m,{ix,y+(h-stroke)*0.5f,z},{0.14f,stroke,d},COL_TEAL);
+    addBox(m,{ix,y-(h-stroke)*0.5f,z},{0.14f,stroke,d},COL_TEAL);
 
-    // B
-    const float bx = 0.25f;
-    addBox(m,{bx-w*0.43f,y,z},{stroke,h,d},COL_TEAL);
-    addBox(m,{bx,y+h*0.43f,z},{w*0.72f,stroke,d},COL_TEAL);
-    addBox(m,{bx,y,z},{w*0.72f,stroke,d},COL_TEAL);
-    addBox(m,{bx,y-h*0.43f,z},{w*0.72f,stroke,d},COL_TEAL);
-    addBox(m,{bx+w*0.29f,y+h*0.22f,z},{stroke,0.065f,d},COL_TEAL);
-    addBox(m,{bx+w*0.29f,y-h*0.22f,z},{stroke,0.065f,d},COL_TEAL);
-
-    // Five bars from the supplied clock reference.
-    const std::array<float,5> bh{0.15f,0.24f,0.34f,0.24f,0.15f};
-    for(size_t i=0;i<bh.size();++i) {
-        float x = -0.20f + float(i)*0.10f;
-        float cy = -0.23f - bh[i]*0.5f;
-        addBox(m,{x,cy,z},{0.026f,bh[i],d},COL_TEAL);
+    // Five equal vertical bars, offset downward toward the center to form a V.
+    const float barHeight = 0.15f;
+    const float barWidth = 0.026f;
+    const float logoTop = 0.49f;
+    const std::array<float,5> offsets{0.0f,0.095f,0.19f,0.095f,0.0f};
+    for(int i=0;i<5;++i) {
+        const float x = -0.20f + float(i)*0.10f;
+        const float cy = logoTop - offsets[i] - barHeight*0.5f;
+        addBox(m,{x,cy,z},{barWidth,barHeight,d},COL_TEAL);
     }
 }
 
@@ -358,7 +349,7 @@ Mesh buildClockMesh(DrawRange& staticRange, DrawRange& hourRange,
         addNumber(m,n,p,h,0.148f,COL_MARK);
     }
 
-    addVsbLogo(m);
+    addKiLogo(m);
 
     // Center hub and a subtle recessed center ring.
     addCylinder(m,0.064f,0.205f,0.060f,COL_DARK,COL_METAL,64);
@@ -874,7 +865,7 @@ private:
 
     void updateUniformBuffer(uint32_t frame) {
         float t=std::chrono::duration<float>(std::chrono::steady_clock::now()-startTime).count();
-        float autoYaw = autoOrbit ? 0.065f*std::sin(t*0.27f) : 0.0f;
+        float autoYaw = autoOrbit ? 0.065f*(t*5.87f) : 0.0f;
         float autoPitch = autoOrbit ? 0.035f*std::sin(t*0.19f+0.8f) : 0.0f;
         float yy=yaw+autoYaw, pp=pitch+autoPitch;
         glm::vec3 eye{
